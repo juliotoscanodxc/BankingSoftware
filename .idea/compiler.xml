@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="turbine-server" />
+        <module name="config-server" />
+        <module name="processing-service" />
+        <module name="common" />
+        <module name="auth" />
+        <module name="eureka" />
+        <module name="history-service" />
+        <module name="card-service" />
+        <module name="zuul" />
+        <module name="account-service" />
+        <module name="dashboard" />
+        <module name="client-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="account-service" options="-parameters" />
+      <module name="auth" options="-parameters" />
+      <module name="card-service" options="-parameters" />
+      <module name="client-service" options="-parameters" />
+      <module name="common" options="-parameters" />
+      <module name="config-server" options="-parameters" />
+      <module name="dashboard" options="-parameters" />
+      <module name="eureka" options="-parameters" />
+      <module name="history-service" options="-parameters" />
+      <module name="processing-service" options="-parameters" />
+      <module name="turbine-server" options="-parameters" />
+      <module name="zuul" options="-parameters" />
+    </option>
+  </component>
+</project>

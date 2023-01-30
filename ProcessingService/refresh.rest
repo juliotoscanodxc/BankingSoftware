@@ -1,0 +1,41 @@
+
+### Get token for processing
+
+POST http://localhost:8500/uaa/oauth/token?grant_type=password&username=account&password=account
+Authorization: Basic client secret
+
+> {%
+   client.global.set("processing_token", response.body.access_token);
+ %}
+
+### Get param of first instance
+
+GET localhost:8804/param
+Authorization: Bearer {{processing_token}}
+
+### Update tparam
+POST localhost:8804/actuator/bus-env
+Authorization: Bearer {{processing_token}}
+Content-Type: application/json
+
+{"name":"tparam", "value":"777"}
+
+### Refresh
+
+POST localhost:8804/actuator/refresh
+Authorization: Bearer {{processing_token}}
+
+### Get param of second instance
+
+GET localhost:8805/param
+Authorization: Bearer {{processing_token}}
+
+### All instances Refresh
+
+POST localhost:8804/actuator/bus-refresh
+Authorization: Bearer {{processing_token}}
+
+### Get param of second instance
+
+GET localhost:8805/param
+Authorization: Bearer {{processing_token}}

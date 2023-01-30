@@ -1,0 +1,34 @@
+# Preparation: we need to create account and put some money
+
+### Create account for the client
+GET http://localhost:8802/create?client_id=7
+
+### Retrieve id of the account
+GET http://localhost:8802/get/7
+
+> {%
+  client.global.set("accountId", response.body[0].id);
+%}
+
+### Put some money to the account
+GET http://localhost:8802/fund/{{accountId}}?sum=1000
+
+# Now we use Processing Service for account operations
+
+### Generate credit card
+GET http://localhost:8804/issue/{{accountId}}
+Accept: application/json
+
+> {%
+  client.global.set("cardNumber", response.body.toString());
+%}
+
+### Spend some money
+GET http://localhost:8804/checkout/{{cardNumber}}?sum=100
+
+### Retrieve balance on the account
+GET http://localhost:8802/get/7
+
+### Retrieve card number for the account
+GET http://localhost:8804/get?account_id={{accountId}}
+

@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: ProcessingService
+
+spring.cloud.config.uri: http://localhost:8600

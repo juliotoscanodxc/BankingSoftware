@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: HistoryService
+  cloud:
+    config:
+      uri: http://localhost:8600

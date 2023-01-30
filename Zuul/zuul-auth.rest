@@ -1,0 +1,22 @@
+
+### Get token for account
+
+POST http://localhost:8500/uaa/oauth/token?grant_type=password&username=account&password=account
+Authorization: Basic client secret
+
+> {%
+   client.global.set("account_token", response.body.access_token);
+ %}
+
+### Create account for the client
+GET http://localhost:8700/account/create?client_id=7
+Authorization: Bearer {{account_token}}
+
+### Retrieve id of the account
+GET http://localhost:8700/account/get/7
+Authorization: Bearer {{account_token}}
+
+> {%
+  client.global.set("accountId", response.body[0].id);
+%}
+

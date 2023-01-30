@@ -1,0 +1,76 @@
+
+### This URL gives access to the public key
+
+GET http://localhost:8500/uaa/oauth/token_key
+
+### Get token for card service
+
+POST http://localhost:8500/uaa/oauth/token?grant_type=password&username=card&password=card
+Authorization: Basic client secret
+
+> {%
+ client.global.set("card_token", response.body.access_token);
+ %}
+
+### Use token to generate a card number
+
+GET http://localhost:8803/create
+Authorization: Bearer {{card_token}}
+
+### Get token for account
+
+POST http://localhost:8500/uaa/oauth/token?grant_type=password&username=account&password=account
+Authorization: Basic client secret
+
+> {%
+ client.global.set("account_token", response.body.access_token);
+ %}
+
+
+### Create account for the client
+GET http://localhost:8802/create?client_id=7
+Authorization: Bearer {{account_token}}
+
+### Retrieve id of the account
+GET http://localhost:8802/get/7
+Accept: application/json
+Authorization: Bearer {{account_token}}
+
+> {%
+  client.global.set("accountId", response.body[0].id);
+%}
+
+### Put some money to the account
+GET http://localhost:8802/fund/{{accountId}}?sum=1000
+Authorization: Bearer {{account_token}}
+
+### Get token for processing service
+
+POST http://localhost:8500/uaa/oauth/token?grant_type=password&username=processing&password=processing
+Authorization: Basic client secret
+
+> {%
+ client.global.set("processing_token", response.body.access_token);
+ %}
+
+### Generate credit card
+GET http://localhost:8804/issue/{{accountId}}
+Authorization: Bearer {{processing_token}}
+
+> {%
+  client.global.set("cardNumber", response.body);
+%}
+
+### Spend some money
+GET http://localhost:8804/checkout/{{cardNumber}}?sum=100
+Authorization: Bearer {{processing_token}}
+
+### Retrieve info of the account
+GET http://localhost:8802/get/7
+Authorization: Bearer {{account_token}}
+
+### Retrieve card number for the account
+GET http://localhost:8804/get?account_id={{accountId}}
+Authorization: Bearer {{processing_token}}
+
+

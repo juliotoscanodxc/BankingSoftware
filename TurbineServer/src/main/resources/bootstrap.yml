@@ -1,0 +1,10 @@
+spring.application.name: TurbineServer
+server.port: 8901
+eureka:
+  client:
+    fetchRegistry: true
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://localhost:8701/eureka,http://localhost:8702/eureka
+
+#turbine.stream.destination: hystrixStreamOutput

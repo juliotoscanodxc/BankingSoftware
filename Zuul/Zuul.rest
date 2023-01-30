@@ -1,0 +1,69 @@
+# Doing all the same but with Zuul
+
+### Create account for the client
+GET http://localhost:8700/account/create?client_id=1
+
+### Put some money to the account
+GET http://localhost:8700/account/fund/1?sum=1000
+
+### Spend some money
+GET http://localhost:8700/account/checkout/1?sum=100
+
+### Get info about the account
+GET http://localhost:8700/account/get/1
+
+### Create client
+GET http://localhost:8700/client/create?name=Test
+
+### Get client info
+GET http://localhost:8700/client/get
+
+### Update client name
+GET http://localhost:8700/client/update/1?name=TestUpdate
+
+### Get info about client with id 1
+GET http://localhost:8700/client/get/1
+
+### Delete client with id 1
+GET http://localhost:8700/client/delete/1
+
+# Preparation: we need to create account and put some money
+
+### Create account for the client
+GET http://localhost:8700/account/create?client_id=7
+Accept: application/json
+
+### Retrieve id of the account
+GET http://localhost:8700/account/get/7
+Accept: application/json
+
+> {%
+  client.global.set("accountId", response.body[0].id);
+%}
+
+### Put some money to the account
+GET http://localhost:8700/account/fund/{{accountId}}?sum=1000
+
+#####################################################################
+# Now we use Processing Service for account operations
+#####################################################################
+
+### Generate credit card
+GET http://localhost:8700/processing/issue/{{accountId}}
+Accept: application/json
+
+> {%
+  client.global.set("cardNumber", response.body.toString());
+%}
+
+### Spend some money
+GET http://localhost:8700/processing/checkout/{{cardNumber}}?sum=100
+
+### Retrieve card number for the account
+GET http://localhost:8700/processing/get?account_id={{accountId}}
+
+
+
+
+
+
